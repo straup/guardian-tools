@@ -26,6 +26,8 @@ class blog:
 
                 blocks = soup.findAll('div', {'class': 'block'})
 
+                readme = []
+
                 for b in blocks:
 
                     id = b['id']
@@ -37,9 +39,14 @@ class blog:
                     paras = el.findAll('p')
 
                     for p in paras:
-                        print p.text.decode('utf8')
+                        readme.append(p)
 
                     self.seen.append(id)
+
+                readme.reverse()
+
+                for p in readme:
+                    yield p
 
             except Exception, e:                
                 sys.stderr.write("Folied because, %s" % e)
@@ -51,4 +58,8 @@ if __name__ == '__main__':
     url = sys.argv[1]
 
     b = blog(url)
-    b.watch()
+
+    for txt in b.watch():
+        print txt.text.decode('utf8')
+
+        
